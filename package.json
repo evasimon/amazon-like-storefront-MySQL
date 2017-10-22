@@ -1,0 +1,27 @@
+{
+  "name": "amazon-like-storefront-mysql",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bamazonCustomer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/evasimon/amazon-like-storefront-MySQL.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/evasimon/amazon-like-storefront-MySQL/issues"
+  },
+  "homepage": "https://github.com/evasimon/amazon-like-storefront-MySQL#readme",
+  "dependencies": {
+    "cli-table": "^0.3.1",
+    "colors": "^1.1.2",
+    "inquirer": "^3.3.0",
+    "mysql": "^2.15.0",
+    "save": "^2.3.1",
+    "word-wrap": "^1.2.3"
+  }
+}
