@@ -8,7 +8,7 @@ Amazon-like storefront application is a node.js/MySQL application built to take 
 
 ### Demo:
    * click for [Customer View](https://www.youtube.com/watch?v=1N0joc9_p-c)
-   * click for [Manager View](https://www.youtube.com/watch?v=1N0joc9_p-c)
+   * click for [Manager View](https://www.youtube.com/watch?v=wScCz-pLT30)
 
 ### Installing dependecies
 
