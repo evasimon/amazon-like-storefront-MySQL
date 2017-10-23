@@ -7,7 +7,8 @@ Amazon-like storefront application is a node.js/MySQL application built to take 
 ## How it works
 
 ### Demo:
-    * Customer View:
+    * Customer View
+    [![CODING IS FUN](https://i.ytimg.com/vi/1N0joc9_p-c/2.jpg?time=1508793833926)](https://www.youtube.com/watch?v=1N0joc9_p-c)
     * Manager View:
 
 ### Installing dependecies
@@ -29,13 +30,9 @@ Open a terminal window and run the following code:
 
 * For Manager View:  `node bamazonManager.js`
     * managers are able to choose from the following menu options:
-        * View Products for Sale
-            * the app lists every available item: the item IDs, names, prices, and quantities.
-        * View Low Inventory
-            * the app lists all items with an inventory count lower than five.
-        * Add to Inventory
-            * app displays a prompt that will let the manager "add more" of any item currently in the store.
-        * Add New Product
-            * app allows the manager to add a completely new product to the store.
+        * View Products for Sale: - the app lists every available item: the item IDs, names, prices, and quantities.
+        * View Low Inventory: - the app lists all items with an inventory count lower than five.
+        * Add to Inventory: - the app displays a prompt that will let the manager "add more" of any item currently in the store.
+        * Add New Product: - the app allows the manager to add a completely new product to the store.
 
 
