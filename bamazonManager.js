@@ -1,9 +1,11 @@
+// Dependencies
 var mysql = require('mysql');
 var wrap = require('word-wrap');
 var Table = require('cli-table');
 var inquirer = require('inquirer');
 var colors = require('colors');
 
+// sets connection param for database connection
 var connection = mysql.createConnection({
     host: "localhost",
     port: 3306,
@@ -15,12 +17,15 @@ var connection = mysql.createConnection({
     database: "bamazon_db"
 });
 
+// makes connection with the server
 connection.connect(function (err) {
     if (err) throw err;
     console.log("connected as id " + connection.threadId);
     chooseMenu();
 });
 
+
+// manager chooses a from a menu list
 function chooseMenu() {
     inquirer
         .prompt({
@@ -50,11 +55,11 @@ function chooseMenu() {
             }
         })
 }
-
+// displays low invetory when requested
 function displayItemsForSale(func) {
     connection.query("SELECT item_id, product_name, price, stock_quantity, department_name FROM products WHERE price > 0;", function (err, result) {
         if (err) throw err;
-
+        // gets and builds the table header
         var obj = result[0];
         var header = [];
         for (var prop in obj) {
@@ -64,13 +69,14 @@ function displayItemsForSale(func) {
         // instantiate 
         var table = new Table({
             head: header,
-            colWidths: [15, 55, 10, 10, 20]
+            colWidths: [15, 55, 10, 5, 20]
         });
 
+        // gets and sets the data in the table
         var item_ids = [];
         for (var i = 0; i < result.length; i++) {
             item_ids.push(result[i].item_id);
-            table.push([result[i].item_id, wrap(result[i].product_name), result[i].price, result[i].stock_quantity, result[i].department_name]);
+            table.push([result[i].item_id, wrap(result[i].product_name), result[i].price.toFixed(2), result[i].stock_quantity, result[i].department_name]);
         }
         var output = table.toString();
         console.log(output);
@@ -82,6 +88,7 @@ function displayItemsForSale(func) {
     });
 }
 
+// displays low inventory (stock lower or equal than 5) when requested 
 function displayLowInventory() {
     connection.query("SELECT item_id, stock_quantity FROM products WHERE stock_quantity <= 5;", function (err, result) {
         console.log(err)
@@ -107,7 +114,7 @@ function displayLowInventory() {
 
 }
 
-
+// funtion adds to inventory
 function addToInvetory(list) {
     inquirer
         .prompt([{
@@ -144,6 +151,7 @@ function updateQuantity(item, quant) {
     );
 }
 
+// prompts for adding new item
 function askQuestions() {
     inquirer
         .prompt([{
@@ -169,10 +177,12 @@ function askQuestions() {
             message: "Input Stock Quantity: "
         }])
         .then(function (answer) {
+            // adds new item to database
             addNewItem(answer.id, answer.name, answer.department, answer.price, answer.stock);
         });
 }
 
+// adds new item to product table
 function addNewItem(id, name, department, price, stock) {
     var query = "INSERT INTO products SET ?"
     connection.query(query,
@@ -190,4 +200,3 @@ function addNewItem(id, name, department, price, stock) {
         }
     )
 }
-
