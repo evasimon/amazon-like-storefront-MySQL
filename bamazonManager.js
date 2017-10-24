@@ -1,9 +1,9 @@
 // Dependencies
-var mysql = require('mysql');
-var wrap = require('word-wrap');
-var Table = require('cli-table');
-var inquirer = require('inquirer');
-var colors = require('colors');
+var mysql = require("mysql");
+var wrap = require("word-wrap");
+var Table = require("cli-table");
+var inquirer = require("inquirer");
+var colors = require("colors");
 
 // sets connection param for database connection
 var connection = mysql.createConnection({
@@ -24,7 +24,6 @@ connection.connect(function (err) {
     chooseMenu();
 });
 
-
 // manager chooses a from a menu list
 function chooseMenu() {
     inquirer
@@ -32,7 +31,13 @@ function chooseMenu() {
             name: "menu",
             type: "list",
             message: "Please select a menu option?",
-            choices: ["View Products for Sale", "View Low Inventory", "Add to Inventory", "Add New Product"]
+            choices: [
+                "View Products for Sale",
+                "View Low Inventory",
+                "Add to Inventory",
+                "Add New Product",
+                "Exit Manager View"
+            ]
         })
         .then(function (answer) {
             // console.log(answer);
@@ -52,12 +57,20 @@ function chooseMenu() {
                 case "Add New Product":
                     askQuestions();
                     break;
+
+                case "Exit Manager View":
+                    exit();
+                    break;
             }
         })
 }
 // displays low invetory when requested
 function displayItemsForSale(func) {
-    connection.query("SELECT item_id, product_name, price, stock_quantity, department_name FROM products WHERE price > 0;", function (err, result) {
+    connection.query(
+        "SELECT item_id, product_name, price, stock_quantity, department_name " +
+        "FROM products " +
+        "WHERE price > 0;", function (err, result) {
+
         if (err) throw err;
         // gets and builds the table header
         var obj = result[0];
@@ -76,22 +89,27 @@ function displayItemsForSale(func) {
         var item_ids = [];
         for (var i = 0; i < result.length; i++) {
             item_ids.push(result[i].item_id);
-            table.push([result[i].item_id, wrap(result[i].product_name), result[i].price.toFixed(2), result[i].stock_quantity, result[i].department_name]);
+            table.push([result[i].item_id, wrap(result[i].product_name), result[i].price.toFixed(2),
+            result[i].stock_quantity, result[i].department_name]);
         }
         var output = table.toString();
         console.log(output);
         if (func) {
             func(item_ids);
         } else {
-            connection.end();
+            chooseMenu();
         }
     });
 }
 
 // displays low inventory (stock lower or equal than 5) when requested 
 function displayLowInventory() {
-    connection.query("SELECT item_id, stock_quantity FROM products WHERE stock_quantity <= 5;", function (err, result) {
-        console.log(err)
+    connection.query(
+        "SELECT item_id, stock_quantity " +
+        "FROM products " +
+        "WHERE stock_quantity <= 5;", function (err, result) {
+
+        // console.log(err)
         var obj = result[0];
         var header = [];
         for (var prop in obj) {
@@ -109,9 +127,8 @@ function displayLowInventory() {
         }
         var output = table.toString();
         console.log(output);
-        connection.end();
+        chooseMenu();
     });
-
 }
 
 // funtion adds to inventory
@@ -126,7 +143,7 @@ function addToInvetory(list) {
         {
             name: "quantity",
             type: "input",
-            message: `Update quantity with:`,
+            message: "Update quantity with:",
         }])
         .then(function (answer) {
             updateQuantity(answer.action, answer.quantity);
@@ -145,8 +162,8 @@ function updateQuantity(item, quant) {
         ],
         function (err, res) {
             if (err) throw err;
-            console.log('DB has been updated!'.green);
-            connection.end();
+            console.log("DB has been updated!".green);
+            chooseMenu();
         }
     );
 }
@@ -196,7 +213,12 @@ function addNewItem(id, name, department, price, stock) {
         function (err, res) {
             if (err) console.log(err)
             console.log(`New item ${id} is added to DB!`.green);
-            connection.end();
+            chooseMenu();
         }
     )
+}
+
+function exit() {
+    connection.end();
+    process.exit(-1);
 }
